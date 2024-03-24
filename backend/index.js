@@ -1,7 +1,8 @@
 const fs = require("fs")
 const path = require("path")
 const express = require("express")
-const multer = require('multer');
+const multer = require("multer");
+const axios = require("axios")
 const { Client, Events, GatewayIntentBits } = require("discord.js");
 require('dotenv').config()
 
@@ -104,7 +105,7 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 			files: [i]
 		})
 		console.log(data.id)
-		ids[Number(index)] = data.id
+		ids[index] = data.id
 	}))
 
 	schema.ids = ids
@@ -113,7 +114,21 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 	schema.noOfFiles = files.length
 	console.log(schema)
 
+	await axios.post("http://127.0.0.1:8090/api/collections/files/records",schema)
+
 	res.send("done")
+})
+
+app.get("/get_file", async (req, res) => {
+	const channel = client.channels.cache.get(process.env.CHANNEL_ID)
+	const file = req.params.search
+	const fileDetails = await axios.get("http://127.0.0.1:8090/api/collections/files/records",{
+		params: {
+			filter: "fileName = 'test51'"
+		}
+	})
+	console.log(fileDetails.data.items[0].ids['0'])
+	console.log(await channel.messages.fetch('')) // TODO
 })
 
 app.listen(process.env.PORT, () => {
