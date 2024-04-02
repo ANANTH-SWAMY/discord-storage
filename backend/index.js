@@ -117,14 +117,18 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 	await axios.post("http://127.0.0.1:8090/api/collections/files/records",schema)
 
 	res.send("done")
+	files.map((i, index) => {
+		console.log(i)
+		fs.unlinkSync(i)
+	})
 })
 
 app.get("/get_file", async (req, res) => {
 	const channel = await client.channels.cache.get(process.env.CHANNEL_ID)
-	const file = req.params.search
+	const file = req.query.search
 	const fileDetails = await axios.get("http://127.0.0.1:8090/api/collections/files/records",{
 		params: {
-			filter: "fileName = 'flanker.png'"
+			filter: `randName = '${file}'`
 		}
 	})
 	console.log(fileDetails.data.items)
