@@ -1,6 +1,12 @@
+import Navbar from "./components/Navbar"
+import FileSection from "./components/FileSection"
+
 function App() {
 	return(
-		<h1 className="text-4xl">hello world</h1>
+		<div className="flex flex-col items-center justify-center gap-2">
+			<Navbar/>
+			<FileSection/>
+		</div>
 	)
 }
 
