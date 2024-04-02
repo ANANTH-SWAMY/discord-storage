@@ -3,6 +3,7 @@ const path = require("path")
 const express = require("express")
 const multer = require("multer");
 const axios = require("axios")
+const http = require("http")
 const { Client, Events, GatewayIntentBits } = require("discord.js");
 require('dotenv').config()
 
@@ -77,7 +78,7 @@ app.get("/send_file", (req, res) => {
 })
 
 app.post("/upload", upload.single('upload'), async (req, res) => {
-	const channel = client.channels.cache.get(process.env.CHANNEL_ID)
+	const channel = await client.channels.cache.get(process.env.CHANNEL_ID)
 
 	const randname = randstr(30)
 
@@ -112,7 +113,6 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 	schema.fileName = req.file.originalname
 	schema.randName = randname
 	schema.noOfFiles = files.length
-	console.log(schema)
 
 	await axios.post("http://127.0.0.1:8090/api/collections/files/records",schema)
 
@@ -120,15 +120,32 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 })
 
 app.get("/get_file", async (req, res) => {
-	const channel = client.channels.cache.get(process.env.CHANNEL_ID)
+	const channel = await client.channels.cache.get(process.env.CHANNEL_ID)
 	const file = req.params.search
 	const fileDetails = await axios.get("http://127.0.0.1:8090/api/collections/files/records",{
 		params: {
-			filter: "fileName = 'test51'"
+			filter: "fileName = 'flanker.png'"
 		}
 	})
-	console.log(fileDetails.data.items[0].ids['0'])
-	console.log(await channel.messages.fetch('')) // TODO
+	console.log(fileDetails.data.items)
+
+	for(let i=0;i<fileDetails.data.items[0].noOfFiles;i++){
+		const message = await channel.messages.fetch(fileDetails.data.items[0].ids[`${i}`])
+		const attachmentUrl = message.attachments.entries().next().value[1].attachment
+		try{
+			const response = await axios.get(attachmentUrl, {responseType: "arraybuffer"})
+			const fileData = Buffer.from(response.data, "binary")
+			fs.appendFileSync(`./uploads/${fileDetails.data.items[0].fileName}`, fileData)
+		}catch(err){
+			console.log(err)
+		}
+	}
+
+	res.set("filename",fileDetails.data.items[0].fileName)
+	res.sendFile(path.join(__dirname,"uploads",fileDetails.data.items[0].fileName),() => {
+		fs.unlinkSync(`./uploads/${fileDetails.data.items[0].fileName}`)
+		console.log("done")
+	})
 })
 
 app.listen(process.env.PORT, () => {
