@@ -125,7 +125,7 @@ app.get("/get_file", async (req, res) => {
 	})
 	console.log(fileDetails.data.items)
 
-	for(let i=0;i<fileDetails.data.items[0].noOfFiles;i++){
+	for(let i=0; i<fileDetails.data.items[0].noOfFiles; i++){
 		const message = await channel.messages.fetch(fileDetails.data.items[0].ids[`${i}`])
 		const attachmentUrl = message.attachments.entries().next().value[1].attachment
 		try{
@@ -144,6 +144,8 @@ app.get("/get_file", async (req, res) => {
 })
 
 app.delete("/delete_file", async (req, res) => {
+	const channel = await client.channels.cache.get(process.env.CHANNEL_ID)
+
 	const file = req.query.randstr
 	const fileDetails = await axios.get("http://127.0.0.1:8090/api/collections/files/records",{
 		params: {
@@ -151,6 +153,12 @@ app.delete("/delete_file", async (req, res) => {
 		}
 	})
 	const file_id = fileDetails.data.items[0].id
+
+	const message_ids = fileDetails.data.items[0].ids
+
+	for(let i=0; i<fileDetails.data.items[0].noOfFiles; i++){
+		const message = await channel.messages.delete(message_ids[`${i}`])
+	}
 
 	const response = await axios.delete(`http://127.0.0.1:8090/api/collections/files/records/${file_id}`)
 	res.send("done")

@@ -11,15 +11,21 @@ function FileUploadModal({id, setFiles, setLoading}){
 		var formData = new FormData();
 		var imagefile = document.querySelector('#file');
 		formData.append("upload", file);
-		const reponse = await axios.post('http://localhost:5000/upload', formData, {
-			headers: {
-			  'Content-Type': 'multipart/form-data'
-			}
-		})
+		let response
+		try{
+			response = await axios.post('http://localhost:5000/upload', formData, {
+				headers: {
+				  'Content-Type': 'multipart/form-data'
+				}
+			})
+		}catch(err){
+			errorToast("Error uploading")
+			setLoading(false)
+		}
 		setLoading(false)
-		if(reponse.data === "done"){
-			const response = await axios.get("http://127.0.0.1:8090/api/collections/files/records")
-			setFiles(response.data.items)
+		if(response.data === "done"){
+			const ress = await axios.get("http://127.0.0.1:8090/api/collections/files/records")
+			setFiles(ress.data.items)
 			successToast("Uploaded")
 		}else{
 			errorToast("Error uploading")
