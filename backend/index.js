@@ -4,6 +4,7 @@ const express = require("express")
 const multer = require("multer");
 const axios = require("axios")
 const http = require("http")
+const cors = require("cors")
 const { Client, Events, GatewayIntentBits } = require("discord.js");
 require('dotenv').config()
 
@@ -48,6 +49,8 @@ client.login(process.env.TOKEN);
 
 // Express
 const app = express()
+
+app.use(cors())
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
@@ -105,7 +108,7 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 
 	await axios.post("http://127.0.0.1:8090/api/collections/files/records",schema)
 
-	res.send("done")
+	res.status(200).send("done")
 	files.map((i, index) => {
 		console.log(i)
 		fs.unlinkSync(i)
@@ -134,11 +137,23 @@ app.get("/get_file", async (req, res) => {
 		}
 	}
 
-	res.set("filename",fileDetails.data.items[0].fileName)
 	res.sendFile(path.join(__dirname,"uploads",fileDetails.data.items[0].fileName),() => {
 		fs.unlinkSync(`./uploads/${fileDetails.data.items[0].fileName}`)
 		console.log("done")
 	})
+})
+
+app.delete("/delete_file", async (req, res) => {
+	const file = req.query.randstr
+	const fileDetails = await axios.get("http://127.0.0.1:8090/api/collections/files/records",{
+		params: {
+			filter: `randName = '${file}'`
+		}
+	})
+	const file_id = fileDetails.data.items[0].id
+
+	const response = await axios.delete(`http://127.0.0.1:8090/api/collections/files/records/${file_id}`)
+	res.send("done")
 })
 
 app.listen(process.env.PORT, () => {

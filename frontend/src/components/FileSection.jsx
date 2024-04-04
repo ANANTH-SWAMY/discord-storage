@@ -1,9 +1,13 @@
 import Card from "./Card"
 
-function FileSection(){
+function FileSection({files, setFiles}){
 	return(
 		<div className="flex items-center justify-center flex-wrap gap-8 w-full grow">
-			<Card/>
+			{files.map((i, index) => {
+				return(
+					<Card fileName={i.fileName} randName={i.randName} setFiles={setFiles} key={index}/>
+				)
+			})}
 		</div>
 	)
 }
