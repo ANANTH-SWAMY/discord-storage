@@ -3,10 +3,11 @@ import axios from "axios"
 
 import { successToast, errorToast } from "../scripts/toasts"
 
-function FileUploadModal({id, setFiles}){
+function FileUploadModal({id, setFiles, setLoading}){
 	const [file, setFile] = useState()
 
 	const handleSubmit = async () => {
+		setLoading(true)
 		var formData = new FormData();
 		var imagefile = document.querySelector('#file');
 		formData.append("upload", file);
@@ -15,6 +16,7 @@ function FileUploadModal({id, setFiles}){
 			  'Content-Type': 'multipart/form-data'
 			}
 		})
+		setLoading(false)
 		if(reponse.data === "done"){
 			const response = await axios.get("http://127.0.0.1:8090/api/collections/files/records")
 			setFiles(response.data.items)
