@@ -88,8 +88,6 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 		files.push(`./uploads/${randname}-${index}`)
 	})
 
-	console.log(files)
-
 	const schema = new Object()
 	const ids = {}
 
@@ -97,7 +95,6 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 		const data = await channel.send({
 			files: [i]
 		})
-		console.log(data.id)
 		ids[index] = data.id
 	}))
 
@@ -110,7 +107,6 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 
 	res.status(200).send("done")
 	files.map((i, index) => {
-		console.log(i)
 		fs.unlinkSync(i)
 	})
 })
@@ -123,7 +119,6 @@ app.get("/get_file", async (req, res) => {
 			filter: `randName = '${file}'`
 		}
 	})
-	console.log(fileDetails.data.items)
 
 	for(let i=0; i<fileDetails.data.items[0].noOfFiles; i++){
 		const message = await channel.messages.fetch(fileDetails.data.items[0].ids[`${i}`])
@@ -139,7 +134,6 @@ app.get("/get_file", async (req, res) => {
 
 	res.sendFile(path.join(__dirname,"uploads",fileDetails.data.items[0].fileName),() => {
 		fs.unlinkSync(`./uploads/${fileDetails.data.items[0].fileName}`)
-		console.log("done")
 	})
 })
 
