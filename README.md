@@ -8,7 +8,7 @@ A webapp that allows you to use discord as cloud storage
 ## Instructions
 1. Create a new application at https://discord.com/developers
 2. Enable all intents under the bot section.
-3. Add the bot to a server.
+3. Add the bot to a server with adminstrator perms.
 4. Clone this repo.
 5. Rename the `.env.template` file in the `backend` directory to `.env` and fill all the fields in the file.
 6. Run `npm i` in both `frontend` and `backend` directories.
