@@ -8,9 +8,8 @@ A webapp that allows you to use discord as cloud storage
 ## Instructions
 1. Clone this repo.
 2. Rename the `.env.template` file in the `backend` directory to `.env` and fill all the fields in the file.
-3. Create a directory called `uploads` in `backend` directory.
-4. Run `npm i` in both `frontend` and `backend` directories.
-5. Run `node commands.js` in the `backend` directory.
-6. Run `npm start` in the `backend` directory.
-7. Run `npm run dev` in the `frontend` directory.
-8. Navigate to http://localhost:5173 on your browser.
+3. Run `npm i` in both `frontend` and `backend` directories.
+4. Run `node commands.js` in the `backend` directory.
+5. Run `npm start` in the `backend` directory.
+6. Run `npm run dev` in the `frontend` directory.
+7. Navigate to http://localhost:5173 on your browser.
