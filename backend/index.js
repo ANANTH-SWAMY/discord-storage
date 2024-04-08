@@ -21,6 +21,10 @@ function randstr(length) {
 	return result;
 }
 
+if(!fs.existsSync("./uploads")){
+	fs.mkdirSync("uploads")
+}
+
 // Discord
 const client = new Client({
 	intents: [
