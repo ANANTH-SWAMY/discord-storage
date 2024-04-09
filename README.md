@@ -11,7 +11,7 @@ A webapp that allows you to use discord as cloud storage
 2. Enable all intents under the bot section.
 3. Add the bot to a server with adminstrator perms.
 4. Clone this repo.
-5. Run `./pocketbase.exe serve` in the `pocketbase` directory, navigate to http://127.0.0.1/_/ and login.(works on windows, if you are using a linux system, then download and replace the windows executable with the linux executable from https://pocketbase.io/docs/)
+5. Run `./pocketbase.exe serve` in the `pocketbase` directory, navigate to http://127.0.0.1/_/ and login. (Works on windows, if you are using a linux system, then download and replace the windows executable with the linux executable from https://pocketbase.io/docs/)
 6. Rename the `.env.template` file in the `backend` directory to `.env` and fill all the fields in the file.
 7. Run `npm i` in both `frontend` and `backend` directories.
 8. Run `node commands.js` in the `backend` directory.
