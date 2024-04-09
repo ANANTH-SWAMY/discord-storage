@@ -13,10 +13,14 @@ A webapp that allows you to use discord as cloud storage
 5. Run pocketbase with `./pocketbase serve`.
 6. Navigate to http://127.0.0.1:8090/_/
 7. Create a new collection called `files`, with the following fields:
-    1. `fileName`: text
-    2. `randName`: text
-    3. `noOfFiles`: number
-    4. `ids`: JSON
+
+|key|dataType|
+|---|---|
+|`fileName`| text|
+|`randName`| text|
+|`noOfFiles`| number|
+|`ids`| JSON|
+
 8. Clone this repo.
 9. Rename the `.env.template` file in the `backend` directory to `.env` and fill all the fields in the file.
 10. Run `npm i` in both `frontend` and `backend` directories.
