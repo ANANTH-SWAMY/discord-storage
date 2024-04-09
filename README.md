@@ -19,7 +19,7 @@ A webapp that allows you to use discord as cloud storage
 |`fileName`| text|
 |`randName`| text|
 |`noOfFiles`| number|
-|`ids`| JSON|
+|`ids`| json|
 
 8. Clone this repo.
 9. Rename the `.env.template` file in the `backend` directory to `.env` and fill all the fields in the file.
