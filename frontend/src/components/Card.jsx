@@ -27,10 +27,9 @@ function Card({fileName, randName, setFiles}){
 	}
 
 	const del = async () => {
-		//TODO: delete animation
 		setDeleteLoading(true)
 		const response = await axios.delete(`http://localhost:5000/delete_file?randstr=${randName}`)
-		const fileResponse = await axios.get("http://127.0.0.1:8090/api/collections/files/records")
+		const fileResponse = await axios.get("http://localhost:5000/files")
 		setFiles(fileResponse.data.items)
 		setDeleteLoading(false)
 		successToast("Done")

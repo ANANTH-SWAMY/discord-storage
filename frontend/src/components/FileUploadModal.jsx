@@ -24,7 +24,7 @@ function FileUploadModal({id, setFiles, setLoading}){
 		}
 		setLoading(false)
 		if(response.data === "done"){
-			const ress = await axios.get("http://127.0.0.1:8090/api/collections/files/records")
+			const ress = await axios.get("http://localhost:5000/files")
 			setFiles(ress.data.items)
 			successToast("Uploaded")
 		}else{

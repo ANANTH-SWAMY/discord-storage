@@ -33,7 +33,7 @@ const client = new Client({
 		GatewayIntentBits.MessageContent,
 		GatewayIntentBits.GuildMembers,
 	],
-	restRequestTimeout: 60000,
+	restRequestTimeout: 120000,
 })
 
 client.once(Events.ClientReady, readyClient => {
@@ -67,10 +67,6 @@ app.get("/", (req, res) => {
 app.get("/send/:message", (req, res) => {
 	client.channels.cache.get(process.env.CHANNEL_ID).send(req.params.message)
 	res.send(req.params.message)
-})
-
-app.get("/send_file", (req, res) => {
-	res.sendFile(path.join(__dirname, "/send_file.html"))
 })
 
 app.post("/upload", upload.single('upload'), async (req, res) => {
@@ -115,6 +111,11 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 	})
 })
 
+app.get("/files", async (req, res) => {
+	const response = await axios.get("http://127.0.0.1:8090/api/collections/files/records")
+	res.send(response.data)
+})
+
 app.get("/get_file", async (req, res) => {
 	const channel = await client.channels.cache.get(process.env.CHANNEL_ID)
 	const file = req.query.search
@@ -126,6 +127,7 @@ app.get("/get_file", async (req, res) => {
 
 	for(let i=0; i<fileDetails.data.items[0].noOfFiles; i++){
 		const message = await channel.messages.fetch(fileDetails.data.items[0].ids[`${i}`])
+		console.log(message.attachments)
 		const attachmentUrl = message.attachments.entries().next().value[1].attachment
 		try{
 			const response = await axios.get(attachmentUrl, {responseType: "arraybuffer"})
