@@ -103,7 +103,7 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 	schema.randName = randname
 	schema.noOfFiles = files.length
 
-	await axios.post("http://127.0.0.1:8090/api/collections/files/records",schema)
+	await axios.post(`${process.env.POCKETBASE_LINK}/api/collections/files/records`,schema)
 
 	res.status(200).send("done")
 	files.map((i, index) => {
@@ -112,14 +112,14 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 })
 
 app.get("/files", async (req, res) => {
-	const response = await axios.get("http://127.0.0.1:8090/api/collections/files/records")
+	const response = await axios.get(`${process.env.POCKETBASE_LINK}/api/collections/files/records`)
 	res.send(response.data)
 })
 
 app.get("/get_file", async (req, res) => {
 	const channel = await client.channels.cache.get(process.env.CHANNEL_ID)
 	const file = req.query.search
-	const fileDetails = await axios.get("http://127.0.0.1:8090/api/collections/files/records",{
+	const fileDetails = await axios.get(`${process.env.POCKETBASE_LINK}/api/collections/files/records`,{
 		params: {
 			filter: `randName = '${file}'`
 		}
@@ -147,7 +147,7 @@ app.delete("/delete_file", async (req, res) => {
 	const channel = await client.channels.cache.get(process.env.CHANNEL_ID)
 
 	const file = req.query.randstr
-	const fileDetails = await axios.get("http://127.0.0.1:8090/api/collections/files/records",{
+	const fileDetails = await axios.get(`${process.env.POCKETBASE_LINK}/api/collections/files/records`,{
 		params: {
 			filter: `randName = '${file}'`
 		}
@@ -160,7 +160,7 @@ app.delete("/delete_file", async (req, res) => {
 		const message = await channel.messages.delete(message_ids[`${i}`])
 	}
 
-	const response = await axios.delete(`http://127.0.0.1:8090/api/collections/files/records/${file_id}`)
+	const response = await axios.delete(`${process.env.POCKETBASE_LINK}/api/collections/files/records/${file_id}`)
 	res.send("done")
 })
 
