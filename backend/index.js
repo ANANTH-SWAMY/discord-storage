@@ -74,7 +74,8 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 
 	const randname = randstr(30)
 
-	const chunkSize = 26214400;
+	// const chunkSize = 26214400;
+	const chunkSize = 10485760;
 	const chunks = [];
 
 	for (let i = 0; i < req.file.size; i += chunkSize) {
@@ -91,12 +92,14 @@ app.post("/upload", upload.single('upload'), async (req, res) => {
 	const schema = new Object()
 	const ids = {}
 
-	await Promise.all(files.map(async (i, index) => {
+	let index = 0
+	for(const i of files){
 		const data = await channel.send({
 			files: [i]
 		})
 		ids[index] = data.id
-	}))
+		index = index + 1
+	}
 
 	schema.ids = ids
 	schema.fileName = req.file.originalname
